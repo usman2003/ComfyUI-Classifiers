@@ -24,20 +24,19 @@ class GenderClassificationNode:
 
     def classify_gender(self, image):
         try:
-            # Convert ComfyUI's image tensor (B, H, W, C) to PIL Image
-            # ComfyUI image is a torch tensor in range [0,1]
-            image = image[0].cpu().numpy()  # Take first image if batch
-            image = (image * 255).astype(np.uint8)  # Convert to uint8
+            
+            image = image[0].cpu().numpy()  
+            image = (image * 255).astype(np.uint8)  
             pil_image = Image.fromarray(image)
 
-            # Perform classification
+            
             results = self.pipe(pil_image)
 
-            # Find the result with the highest score
+        
             top_result = max(results, key=lambda x: x['score'])
             label = top_result['label'].lower()
 
-            # Extract gender from label (e.g., "female portrait" -> "Female")
+            
             if 'female' in label:
                 gender = "Female"
             elif 'male' in label:
